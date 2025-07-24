@@ -15,7 +15,6 @@ namespace NekogiriMod
     {
         private void Awake()
         {
-            // Set up plugin logging
             Logger.LogInfo(@"
  ██ ▄█▀ ██▓ ██▀███   ██▓  ▄████  ██▓ ██▀███   ██▓
  ██▄█▒ ▓██▒▓██ ▒ ██▒▓██▒ ██▒ ▀█▒▓██▒▓██ ▒ ██▒▓██▒
@@ -33,7 +32,6 @@ namespace NekogiriMod
             var harmony = new Harmony("kirigiri.peak.nekogirioffline");
             harmony.PatchAll();
 
-            // Optionally log that the patch has been applied
             Logger.LogInfo("Made with <3 By Kirigiri \nhttps://discord.gg/TBs8Te5nwn");
         }
 
@@ -56,7 +54,6 @@ namespace NekogiriMod
 
                 LoginResponse loginResponse;
 
-                // Assuming you have access to buildVersion object here
                 if (buildVersion.BuildName == "beta")
                 {
                     loginResponse = new LoginResponse
@@ -101,7 +98,6 @@ namespace NekogiriMod
                 PhotonNetwork.GameVersion = version.ToString();
                 PhotonNetwork.PhotonServerSettings.AppSettings.AppVersion = version.ToMatchmaking();
 
-                // Use reflection to call private static method PrepareSteamAuthTicket
                 var method = typeof(NetworkConnector).GetMethod("PrepareSteamAuthTicket", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
                 if (method != null)
                 {
