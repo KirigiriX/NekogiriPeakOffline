@@ -41,29 +41,48 @@ namespace NekogiriMod
         public class CloudAPICheckVersionPatch
         {
             private static int? _cachedLevelIndex = null;
+
             [HarmonyPrefix]
             public static bool Prefix(Action<LoginResponse> response)
             {
                 Debug.Log("[NekogiriPeak] Patching CloudAPI.CheckVersion");
 
+                BuildVersion buildVersion = new BuildVersion(Application.version);
+
                 if (_cachedLevelIndex == null)
                 {
-                    _cachedLevelIndex = new int?(global::UnityEngine.Random.Range(1, 1001));
-                }
-                LoginResponse loginResponse = new LoginResponse
-                {
-                    VersionOkay = true,
-                    HoursUntilLevel = 24,
-                    MinutesUntilLevel = 00,
-                    SecondsUntilLevel = 00,
-                    LevelIndex = _cachedLevelIndex.Value,
-                    Message = "new patch :) have fun with the flying disc~  ALSO BACKPACK FIX??"
-                };
-                if (response != null)
-                {
-                    response(loginResponse);
+                    _cachedLevelIndex = UnityEngine.Random.Range(1, 1001);
                 }
 
+                LoginResponse loginResponse;
+
+                // Assuming you have access to buildVersion object here
+                if (buildVersion.BuildName == "beta")
+                {
+                    loginResponse = new LoginResponse
+                    {
+                        VersionOkay = true,
+                        HoursUntilLevel = 24,
+                        MinutesUntilLevel = 0,
+                        SecondsUntilLevel = 0,
+                        LevelIndex = _cachedLevelIndex.Value,
+                        Message = "Thanks for testing the PEAK beta. Watch out for bugs! (the current beta is the same as the live game, check back later for a new beta!)"
+                    };
+                }
+                else
+                {
+                    loginResponse = new LoginResponse
+                    {
+                        VersionOkay = true,
+                        HoursUntilLevel = 24,
+                        MinutesUntilLevel = 0,
+                        SecondsUntilLevel = 0,
+                        LevelIndex = _cachedLevelIndex.Value,
+                        Message = "new patch :) have fun with the flying disc~  ALSO BACKPACK FIX??"
+                    };
+                }
+
+                response?.Invoke(loginResponse);
                 return false;
             }
         }
